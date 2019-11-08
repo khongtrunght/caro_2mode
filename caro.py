@@ -4,9 +4,19 @@ import random
 from typing import List, Any
 
 
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+
+        # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
+
 def display_board():
     #clear_output
-    system('clear')
+    clear()
     print(' ' + boards[1] + ' | ' + boards[2] + ' | ' + boards[3])
     print('------------')
     print(' ' + boards[4] + ' | ' + boards[5] + ' | ' + boards[6])
