@@ -1,10 +1,11 @@
-#from IPython.display import clear_output
+from IPython.display import clear_output
 from os import system, name
 import random
+from typing import List, Any
 
 
 def display_board():
-    # clear_output
+    #clear_output
     system('clear')
     print(' ' + boards[1] + ' | ' + boards[2] + ' | ' + boards[3])
     print('------------')
@@ -14,6 +15,7 @@ def display_board():
 
 
 def player_input():
+    global choose
     choose = ('X', 'O')
     inp = ' '
     while inp not in choose:
@@ -31,10 +33,37 @@ def lay_o_danh(player):
     return int(vi_tri)
 
 def lay_o_danh_bot(player):
-    vi_tri = random.randint(1, 9)
-    while not check_hop_le(vi_tri):
-        vi_tri = random.randint(1,9)
-    return vi_tri
+    kha_thi = []
+    kha_thi = [x for x, lay_o in enumerate(boards) if lay_o == ' ' and x != 0]
+    for xet in choose :
+        for i in kha_thi:
+            boards_copy = boards[:]
+            boards_copy[i] = xet
+            if check_win(xet,boards_copy) :
+                return i
+
+    if 5 in kha_thi:
+        return 5
+
+    goc_trong = []
+    for i in kha_thi:
+        if i in [1,3,7,9] :
+            goc_trong.append(i)
+    if len(goc_trong) > 0 :
+        return random_pick(goc_trong)
+    o_trong = []
+    for i in kha_thi:
+        if i in [2,4,6,8] :
+            o_trong.append(i)
+    if len(o_trong) > 0 :
+        return random_pick(o_trong)
+
+
+
+def random_pick(set):
+    import random
+    l = len(set)
+    return set[random.randrange(0,l)]
 
 def check_hop_le(vi_tri):
     return boards[vi_tri] == ' '
@@ -66,7 +95,7 @@ def choi_vs_nguoi():
     display_board()
     vi_tri = lay_o_danh(Luot)
     danh_dau(vi_tri,bieu_tuong[ten.index(Luot)])
-    if check_win(bieu_tuong[ten.index(Luot)]):
+    if check_win(bieu_tuong[ten.index(Luot)],boards):
         print("Chuc mung %s da chien thang!!"%(Luot))
         on_game = False
     else :
@@ -84,7 +113,7 @@ def choi_vs_may():
         display_board()
         vi_tri = lay_o_danh(Luot)
         danh_dau(vi_tri, bieu_tuong[ten.index(Luot)])
-        if check_win(bieu_tuong[ten.index(Luot)]):
+        if check_win(bieu_tuong[ten.index(Luot)],boards):
             display_board()
             print("Chuc mung %s da chien thang!!" % (Luot))
             on_game = False
@@ -98,7 +127,7 @@ def choi_vs_may():
         display_board()
         vi_tri = lay_o_danh_bot(Luot)
         danh_dau(vi_tri, bieu_tuong[ten.index(Luot)])
-        if check_win(bieu_tuong[ten.index(Luot)]):
+        if check_win(bieu_tuong[ten.index(Luot)],boards):
             display_board()
             print("Chuc mung %s da chien thang!!" % (Luot))
             on_game = False
@@ -109,7 +138,7 @@ def choi_vs_may():
             else:
                 Luot = ten[ten.index(Luot) - 1]
 
-def check_win(mark):
+def check_win(mark,boards):
     return ((boards[7] == mark and boards[8] == mark and boards[9] == mark) or  # across the top
             (boards[4] == mark and boards[5] == mark and boards[6] == mark) or  # across the middle
             (boards[1] == mark and boards[2] == mark and boards[3] == mark) or  # across the bottom
