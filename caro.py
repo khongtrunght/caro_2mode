@@ -17,11 +17,11 @@ def clear():
 def display_board():
     #clear_output
     clear()
-    print(' ' + boards[1] + ' | ' + boards[2] + ' | ' + boards[3])
+    print(' ' + show_up(1) + ' | ' + show_up(2) + ' | ' + show_up(3))
     print('------------')
-    print(' ' + boards[4] + ' | ' + boards[5] + ' | ' + boards[6])
+    print(' ' + show_up(4) + ' | ' + show_up(5) + ' | ' + show_up(6))
     print('------------')
-    print(' ' + boards[7] + ' | ' + boards[8] + ' | ' + boards[9])
+    print(' ' + show_up(7) + ' | ' + show_up(8) + ' | ' + show_up(9))
 
 
 def player_input():
@@ -34,6 +34,11 @@ def player_input():
     mark_2 = choose[choose.index(inp) - 1]
     print("you picked " + mark_1 + " 2nd player will be " + mark_2)
     return (mark_1, mark_2)
+
+def show_up(i):
+    if boards[i] == ' ' :
+        return str(i)
+    return boards[i]
 
 
 def lay_o_danh(player):
